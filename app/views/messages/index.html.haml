@@ -1,0 +1,34 @@
+.wrapper
+  .side-bar
+    .side-bar-header
+      .user-info
+        %p.user-info__name
+          = current_user.name
+        %ul.edit
+          %li.edit__create-group
+            = link_to do
+              = fa_icon("cog")
+          %li.edit__user
+            = link_to edit_user_path(current_user) do
+              = fa_icon("edit")
+     .side-bar-groups
+       = render partial: "group"
+
+   .chat
+     .chat-header
+       .header-left
+         %p.current-group-name current-group-name
+         %p.current-group-members current-group-members
+       .header-right
+         %a.header-right__edit edit
+
+     .chat-body
+       .message
+         = render partial: "messages"
+
+     .chat-footer
+       .form
+         %form
+           .input-box
+             %input.input-box__text{ type: "text", placeholder: "type a message"}
+             %label.input-box__image
