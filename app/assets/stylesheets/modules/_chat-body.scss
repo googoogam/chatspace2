@@ -1,6 +1,6 @@
 .chat{
    .chat-body{
-    @include div_basic(calc(100vw - 300px), calc(100vh - 15% - 90px), #white);
+    @include div_basic(calc(100vw - 300px), calc(100vh - 100px - 90px), #white);
     padding: 0 $chat-width-space;
      .message{
       padding-top: 46px;
