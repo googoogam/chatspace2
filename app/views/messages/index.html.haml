@@ -1,6 +1,7 @@
 .wrapper
   = render partial: "shared/side_bar"
 
+
   .chat
     .chat-header
       .header-left
@@ -27,6 +28,4 @@
               = fa_icon("image")
               = f.file_field :image, class: "input-box__file"
           %button.form__send-btn{type: "submit",} Send
-
-
 
