@@ -7,9 +7,17 @@
 @import "./modules/chat-body";
 @import "./modules/chat-footer";
 @import "font-awesome";
+@import "./modules/user";
+@import "./modules/flash";
+@import "modules/group";
+
  .notice {
   @include div_basic(100%, 25px, $light-blue);
   &__text {
     @include font_basic(#fff, 16px, null, 25px, center);
   }
+}
+.link-color:link, .link-color:visited, .link-color:hover, .link-color:active {
+  color: #fff;
+  text-decoration: none;
 }
