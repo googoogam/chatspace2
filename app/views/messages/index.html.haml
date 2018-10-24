@@ -1,47 +1,32 @@
-.notice
-  %p.notice__text ログインしました
-
 .wrapper
-  .side-bar
-    .side-bar-header
-      .user-info
-        %p.user-info__name user-name
-        %ul.edit
-          %li.edit__create-group
-            %a
-              = fa_icon "cog 3x "
-          %li.edit__user
-            %a
-              = fa_icon "edit 3x "
-
-    .side-bar-groups
-      .group-info
-        %a
-          %p.group-name groupA
-          %p.group-message messageA-1
-      .group-info
-        %a
-          %p.group-name groupB
-          %p.group-message messagrB-1
-
+  = render partial: "shared/side_bar"
 
   .chat
     .chat-header
       .header-left
-        %p.current-group-name current-group-name
-        %p.current-group-members current-group-members
+        %p.current-group-name
+          = @group.name
+        %p.current-group-members
+          Members:
+          - @group.users.each do |user|
+            = user.name
       .header-right
-        %a.header-right__edit edit
+        %a.header-right__edit
+          = link_to "/groups/1/edit", class: "header-right__edit--btn" do
+            Edit
 
     .chat-body
-      = render partial: "messages"
+      = render @messages
+
     .chat-footer
       .form
-        %form
+        = form_for [@group, @message] do |f|
           .input-box
-            %input.input-box__text{ type: "text", placeholder: "type a message"}
-            %label.input-box__image
+            = f.text_field :content, class: 'input-box__text', placeholder: "type a message"
+            = f.label :image, class: 'input-box__image' do
               = fa_icon("image")
-              %input.input-box__file-send{type: "file"}
+              = f.file_field :image, class: "input-box__file"
           %button.form__send-btn{type: "submit",} Send
+
+
 
