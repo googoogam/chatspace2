@@ -1,9 +1,11 @@
 class GroupsController < ApplicationController
     before_action :set_group, only: [:edit, :update]
 
-   def index
+  def index
+       @user = current_user
+    flash[:notice] = "ようこそ、chat space へ。 本日は#{Date.today}です。"
   end
-    def new
+  def new
     @group = Group.new
     @group.users << current_user
   end
@@ -14,9 +16,11 @@ class GroupsController < ApplicationController
     else
       render :new
     end
-
- def edit
    end
+
+   def edit
+   end
+
    def update
     if @group.update(group_params)
       redirect_to group_messages_path(@group), notice: 'グループを編集しました'
@@ -25,7 +29,7 @@ class GroupsController < ApplicationController
     end
   end
 
-  end
+
    private
   def group_params
     params.require(:group).permit(:name, { :user_ids => [] })
