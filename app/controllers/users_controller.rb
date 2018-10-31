@@ -1,5 +1,14 @@
 class UsersController < ApplicationController
-    def edit
+
+  def index
+    @users = User.where('name LIKE(?) and name != ?', "%#{params[:keyword]}%", current_user.name)
+    respond_to do |format|
+      format.html
+      format.json
+    end
+  end
+
+  def edit
   end
 
   def update
