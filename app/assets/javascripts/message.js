@@ -31,9 +31,8 @@ $(function(){
     .done(function(data){
       var html = buildHTML(data);
       $('.chat-body').append(html);
-      new_message.reset();
-      // $('.input-box__text').val('');
-      // $('.input-box__file').val('');
+      $('.input-box__text').val('');
+      $('.input-box__file').val('');
       $('.form__send-btn').prop('disabled', false);
       $('.chat-body').animate({scrollTop: $('.chat-body')[0].scrollHeight},"first");
     })
