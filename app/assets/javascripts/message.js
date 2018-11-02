@@ -1,8 +1,8 @@
-$(function(){
+$(document).on('turbolinks:load', function(){
   function buildHTML(message){
     var chatMessage = (message.content)? `${message.content}` : "";
     var chatImage = (message.image)? `<img src="${message.image}">` : "";
-    var html = `<div class="message" id="${message.id}">
+    var html = `<div class="message" data-id="${message.id}">
                   <div class="message-top">
                     <p class="message-top__name">${message.user_name}</p>
                     <p class="message-top__date">${message.date}</p>
@@ -19,7 +19,9 @@ $(function(){
     e.preventDefault();
     var formData = new FormData(this);
     var url = $(this).attr('action');
-
+    // if (data-id === undefined) {
+    //   alert("error");
+    // }
     $.ajax({
       url: url,
       type: "POST",
@@ -28,26 +30,30 @@ $(function(){
       processData: false,
       contentType: false
     })
+
     .done(function(data){
-      var html = buildHTML(data);
-      $('.chat-body').append(html);
-      $('#new_message')[0].reset();
-      $('.form__send-btn').prop('disabled', false);
-      $('.chat-body').animate({scrollTop: $('.chat-body')[0].scrollHeight},"fast");
+      if (data.id != null){
+        var html = buildHTML(data);
+        $('.chat-body').append(html);
+        $('#new_message')[0].reset();
+        $('.form__send-btn').prop('disabled', false);
+        $('.chat-body').animate({scrollTop: $('.chat-body')[0].scrollHeight},"fast");
+      }else{
+        alert('error')
+      }
     })
-    .fail(function(){
-      alert('テキストを入力してください');
-      $('.form__send-btn').prop('disabled', false);
-    });
+    .fail(function() {
+      alert('error');
+    })
   });
 
 var interval = setInterval(function(){
-    var presentMessageId = $('.message').last().attr('id')
-      console.log(presentMessageId)
+    var presentMessageId = $('.message').last().attr('data-id')
+    console.log(presentMessageId)
     var presentHTML = window.location.href
-      console.log(presentHTML)
+    // console.log(presentHTML)
     if (presentHTML.match(/\/groups\/\d+\/messages/)) {
-      console.log(presentHTML)
+    // console.log(presentHTML)
     $.ajax ({
       url: presentHTML,
       type: 'GET',
@@ -59,11 +65,10 @@ var interval = setInterval(function(){
 
     .done(function(json){
     var insertHTML ="";
-
     json.forEach(function(message){
       if (message.id > presentMessageId){
         insertHTML += buildHTML(message);
-      console.log(insertHTML)
+
         $messages = $('.chat-body');
         $messages.append(insertHTML);
         $messages.animate({scrollTop: $messages[0].scrollHeight}, 'fast');
@@ -72,13 +77,10 @@ var interval = setInterval(function(){
   })
 
     .fail(function(data){
-        // alert('error')
+        alert('error')
       });
      } else {
       clearInterval(interval)
     }
   },5000);
-
-
-
 });
