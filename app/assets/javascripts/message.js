@@ -49,11 +49,8 @@ $(document).on('turbolinks:load', function(){
 
 var interval = setInterval(function(){
     var presentMessageId = $('.message').last().attr('data-id')
-    console.log(presentMessageId)
     var presentHTML = window.location.href
-    // console.log(presentHTML)
     if (presentHTML.match(/\/groups\/\d+\/messages/)) {
-    // console.log(presentHTML)
     $.ajax ({
       url: presentHTML,
       type: 'GET',
