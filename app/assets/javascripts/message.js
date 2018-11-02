@@ -62,7 +62,6 @@ var interval = setInterval(function(){
     json.forEach(function(message){
       if (message.id > presentMessageId){
         insertHTML += buildHTML(message);
-
         $messages = $('.chat-body');
         $messages.append(insertHTML);
         $messages.animate({scrollTop: $messages[0].scrollHeight}, 'fast');
