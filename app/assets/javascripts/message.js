@@ -2,7 +2,7 @@ $(function(){
   function buildHTML(message){
     var chatMessage = (message.content)? `${message.content}` : "";
     var chatImage = (message.image)? `<img src="${message.image}">` : "";
-    var html = `<div class="message">
+    var html = `<div class="message" id="${message.id}">
                   <div class="message-top">
                     <p class="message-top__name">${message.user_name}</p>
                     <p class="message-top__date">${message.date}</p>
@@ -31,14 +31,54 @@ $(function(){
     .done(function(data){
       var html = buildHTML(data);
       $('.chat-body').append(html);
-      $('.input-box__text').val('');
-      $('.input-box__file').val('');
+      $('#new_message')[0].reset();
       $('.form__send-btn').prop('disabled', false);
-      $('.chat-body').animate({scrollTop: $('.chat-body')[0].scrollHeight},"first");
+      $('.chat-body').animate({scrollTop: $('.chat-body')[0].scrollHeight},"fast");
     })
     .fail(function(){
       alert('テキストを入力してください');
       $('.form__send-btn').prop('disabled', false);
     });
   });
+
+var interval = setInterval(function(){
+    var presentMessageId = $('.message').last().attr('id')
+      console.log(presentMessageId)
+    var presentHTML = window.location.href
+      console.log(presentHTML)
+    if (presentHTML.match(/\/groups\/\d+\/messages/)) {
+      console.log(presentHTML)
+    $.ajax ({
+      url: presentHTML,
+      type: 'GET',
+      data: {id: presentMessageId},
+      dataType: 'json',
+      processData: false,
+      contentType: false
+           })
+
+    .done(function(json){
+    var insertHTML ="";
+
+    json.forEach(function(message){
+      if (message.id > presentMessageId){
+        insertHTML += buildHTML(message);
+      console.log(insertHTML)
+        $messages = $('.chat-body');
+        $messages.append(insertHTML);
+        $messages.animate({scrollTop: $messages[0].scrollHeight}, 'fast');
+      }
+    });
+  })
+
+    .fail(function(data){
+        // alert('error')
+      });
+     } else {
+      clearInterval(interval)
+    }
+  },5000);
+
+
+
 });
