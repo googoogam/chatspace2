@@ -19,9 +19,6 @@ $(document).on('turbolinks:load', function(){
     e.preventDefault();
     var formData = new FormData(this);
     var url = $(this).attr('action');
-    // if (data-id === undefined) {
-    //   alert("error");
-    // }
     $.ajax({
       url: url,
       type: "POST",
