@@ -58,7 +58,6 @@ var interval = setInterval(function(){
     .done(function(json){
     var insertHTML ="";
     var $messages = $('.chat-body');
-    console.log(json);
     json.forEach(function(message){
         insertHTML += buildHTML(message);
         $messages.append(insertHTML);
