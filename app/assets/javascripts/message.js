@@ -1,8 +1,8 @@
-$(function(){
+$(document).on('turbolinks:load', function(){
   function buildHTML(message){
     var chatMessage = (message.content)? `${message.content}` : "";
     var chatImage = (message.image)? `<img src="${message.image}">` : "";
-    var html = `<div class="message">
+    var html = `<div class="message" data-id=${message.id}>
                   <div class="message-top">
                     <p class="message-top__name">${message.user_name}</p>
                     <p class="message-top__date">${message.date}</p>
@@ -19,7 +19,6 @@ $(function(){
     e.preventDefault();
     var formData = new FormData(this);
     var url = $(this).attr('action');
-
     $.ajax({
       url: url,
       type: "POST",
@@ -28,18 +27,49 @@ $(function(){
       processData: false,
       contentType: false
     })
+
     .done(function(data){
-      var html = buildHTML(data);
-      $('.chat-body').append(html);
-      new_message.reset();
-      // $('.input-box__text').val('');
-      // $('.input-box__file').val('');
-      $('.form__send-btn').prop('disabled', false);
-      $('.chat-body').animate({scrollTop: $('.chat-body')[0].scrollHeight},"first");
+      if (data.id != null){
+        var html = buildHTML(data);
+        $('.chat-body').append(html);
+        $('#new_message')[0].reset();
+        $('.form__send-btn').prop('disabled', false);
+        $('.chat-body').animate({scrollTop: $('.chat-body')[0].scrollHeight},"fast");
+      } else {
+        alert('error')
+      }
     })
-    .fail(function(){
-      alert('テキストを入力してください');
-      $('.form__send-btn').prop('disabled', false);
-    });
+    .fail(function() {
+      alert('error');
+    })
   });
+
+var interval = setInterval(function(){
+    var presentMessageId = $('.message').last().data('id')
+    var presentHTML = window.location.href
+    if (presentHTML.match(/\/groups\/\d+\/messages/)) {
+    $.ajax ({
+      url: presentHTML,
+      type: 'GET',
+      data: {id: presentMessageId},
+      dataType: 'json',
+           })
+
+    .done(function(json){
+    var insertHTML ="";
+    var $messages = $('.chat-body');
+    json.forEach(function(message){
+        insertHTML += buildHTML(message);
+        $messages.append(insertHTML);
+        $messages.animate({scrollTop: $messages[0].scrollHeight}, 'fast');
+    });
+  })
+
+    .fail(function(){
+        alert('error')
+    })
+     } else {
+      clearInterval(interval)
+    }
+  },5000);
 });
