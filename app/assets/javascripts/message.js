@@ -2,7 +2,7 @@ $(document).on('turbolinks:load', function(){
   function buildHTML(message){
     var chatMessage = (message.content)? `${message.content}` : "";
     var chatImage = (message.image)? `<img src="${message.image}">` : "";
-    var html = `<div class="message" data-id="${message.id}">
+    var html = `<div class="message" data-id=${message.id}>
                   <div class="message-top">
                     <p class="message-top__name">${message.user_name}</p>
                     <p class="message-top__date">${message.date}</p>
@@ -35,7 +35,7 @@ $(document).on('turbolinks:load', function(){
         $('#new_message')[0].reset();
         $('.form__send-btn').prop('disabled', false);
         $('.chat-body').animate({scrollTop: $('.chat-body')[0].scrollHeight},"fast");
-      }else{
+      } else {
         alert('error')
       }
     })
@@ -45,7 +45,7 @@ $(document).on('turbolinks:load', function(){
   });
 
 var interval = setInterval(function(){
-    var presentMessageId = $('.message').last().attr('data-id')
+    var presentMessageId = $('.message').last().data('id')
     var presentHTML = window.location.href
     if (presentHTML.match(/\/groups\/\d+\/messages/)) {
     $.ajax ({
@@ -53,25 +53,22 @@ var interval = setInterval(function(){
       type: 'GET',
       data: {id: presentMessageId},
       dataType: 'json',
-      processData: false,
-      contentType: false
            })
 
     .done(function(json){
     var insertHTML ="";
+    var $messages = $('.chat-body');
+    console.log(json);
     json.forEach(function(message){
-      if (message.id > presentMessageId){
         insertHTML += buildHTML(message);
-        $messages = $('.chat-body');
         $messages.append(insertHTML);
         $messages.animate({scrollTop: $messages[0].scrollHeight}, 'fast');
-      }
     });
   })
 
-    .fail(function(data){
+    .fail(function(){
         alert('error')
-      });
+    })
      } else {
       clearInterval(interval)
     }
