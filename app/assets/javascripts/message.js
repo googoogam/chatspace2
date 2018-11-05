@@ -45,7 +45,7 @@ $(document).on('turbolinks:load', function(){
   });
 
 var interval = setInterval(function(){
-    var presentMessageId = $('.message').last().data('id') || 0;
+    var presentMessageId = $('.message').last().data('id')
     var presentHTML = window.location.href
     if (presentHTML.match(/\/groups\/\d+\/messages/)) {
     $.ajax ({
